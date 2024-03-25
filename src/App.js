@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Navbar } from "./Navbar";
-import { Main } from "./Main";
-
+import { Navbar } from "./Components/Navbar";
+import { Main } from "./Components/Main";
+// import "bootstrap/dist/css/bootstrap.min.css";
 const tempMovieData = [
   {
     imdbID: "tt1375666",
