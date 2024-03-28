@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Navbar } from "./Components/Navbar";
 import { Main } from "./Components/Main";
+import { MoviesBox } from "./Components/MoviesBox";
+import { MovieToWatch } from "./Components/MovieToWatch";
+import { Box } from "./Components/Box";
+import { WatchedSummary } from "./Components/WatchedSummary";
+import { WatchedMovie } from "./Components/WatchedMovie";
+import { Movie } from "./Components/Movie";
 // import "bootstrap/dist/css/bootstrap.min.css";
 const tempMovieData = [
   {
@@ -53,12 +59,31 @@ export const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 export default function App() {
+  const [watched, setWatched] = useState(tempWatchedData);
+
   const [movies, setMovies] = useState(tempMovieData);
 
   return (
     <>
       <Navbar movies={movies} />
-      <Main movies={movies} />
+      <Main>
+        <Box>
+          <ul className="list">
+            {movies?.map((movie, idx) => (
+              <Movie movie={movie} key={idx} />
+            ))}
+          </ul>
+        </Box>
+
+        <Box>
+          <WatchedSummary watched={watched} />
+          <ul className="list">
+            {watched.map((movie) => (
+              <WatchedMovie movie={movie} />
+            ))}
+          </ul>
+        </Box>
+      </Main>
     </>
   );
 }

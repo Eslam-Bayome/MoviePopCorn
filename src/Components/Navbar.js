@@ -5,7 +5,7 @@ export function Navbar({ movies }) {
     <nav className="nav-bar">
       <div className="logo">
         <span role="img">🍿</span>
-        <h1>usePopcorn</h1>
+        <h1>popCornMovies</h1>
       </div>
       <SearchInput />
       <p className="num-results">

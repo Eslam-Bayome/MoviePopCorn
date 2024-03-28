@@ -51,10 +51,10 @@ body {
 
 .box {
   width: 42rem;
-  max-width: 42rem;
+  /* max-width: 42rem; */
   background-color: var(--color-background-500);
   border-radius: 0.9rem;
-  overflow: auto;
+  /* overflow: auto; */
   position: relative;
 }
 
@@ -103,7 +103,31 @@ body {
   /* background-color: var(--color-background-900); */
   background-color: var(--color-primary-light);
 }
-
+@media (max-width: 800px) and (min-width: 601px) {
+  .search {
+    width: 20rem;
+  }
+}
+@media (max-width: 600px) {
+  .search {
+    width: 10rem;
+  }
+  .logo h1 {
+    font-size: 20px;
+  }
+  .logo span {
+    font-size: 20px;
+  }
+  .nav-bar {
+    padding: 10px;
+  }
+  body {
+    padding: 10px;
+  }
+  .main {
+    flex-direction: column;
+  }
+}
 .search::placeholder {
   color: var(--color-text-dark);
 }

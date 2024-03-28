@@ -1,11 +1,6 @@
-import { MoviesBox } from "./MoviesBox";
-import { MovieToWatch } from "./MovieToWatch";
+// import { MoviesBox } from "./MoviesBox";
+// import { MovieToWatch } from "./MovieToWatch";
 
-export function Main({ movies }) {
-  return (
-    <main className="main row">
-      <MoviesBox movies={movies} />
-      <MovieToWatch />
-    </main>
-  );
+export function Main({ children }) {
+  return <main className="main row">{children}</main>;
 }
