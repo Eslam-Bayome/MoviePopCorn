@@ -1,4 +1,4 @@
-export function WatchedMovie({ movie }) {
+export function WatchedMovie({ movie, onDeleteMovie }) {
   return (
     <li key={movie.imdbID}>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
@@ -6,7 +6,7 @@ export function WatchedMovie({ movie }) {
       <div>
         <p>
           <span>⭐️</span>
-          <span>{movie.imdbRating}</span>
+          <span>{isNaN(movie.imdbRating) ? 0 : movie.imdbRating}</span>
         </p>
         <p>
           <span>🌟</span>
@@ -14,8 +14,14 @@ export function WatchedMovie({ movie }) {
         </p>
         <p>
           <span>⏳</span>
-          <span>{movie.runtime} min</span>
+          <span>{isNaN(movie.Runtime) ? 0 : movie.Runtime} min</span>
         </p>
+        <button
+          className="btn-delete"
+          onClick={() => onDeleteMovie(movie.imdbID)}
+        >
+          X
+        </button>
       </div>
     </li>
   );

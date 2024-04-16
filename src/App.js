@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navbar } from "./Components/Navbar";
 import { Main } from "./Components/Main";
 import { MoviesBox } from "./Components/MoviesBox";
 import { MovieToWatch } from "./Components/MovieToWatch";
 import { Box } from "./Components/Box";
 import { WatchedSummary } from "./Components/WatchedSummary";
-import { WatchedMovie } from "./Components/WatchedMovie";
-import { Movie } from "./Components/Movie";
+import { WatchedMovieList } from "./Components/WatchedMovieList";
+import { MovieList } from "./Components/MovieList";
+import { ErrorMessage } from "./Components/ErrorMessage";
+import { IsLoading } from "./Components/IsLoading";
+import { MovieDetails } from "./Components/MovieDetails";
 // import "bootstrap/dist/css/bootstrap.min.css";
 const tempMovieData = [
   {
@@ -57,31 +60,87 @@ export const tempWatchedData = [
 
 export const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
-
+export const KEY = "e5bda4f1";
 export default function App() {
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [query, setQuery] = useState("");
+  const [watched, setWatched] = useState([]);
+  const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [ifError, setIfError] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  // useEffect(() => {
+  //   setQuery("asd");
+  //   console.log("1");
+  // }, [query]);
+  function handleSelectedId(id) {
+    setSelectedId((selectedId) => (id === selectedId ? null : id));
+  }
+  function handleCloseMovie() {
+    setSelectedId(null);
+  }
+  function handleAddToWatchd(movie) {
+    setWatched((watched) => [...watched, movie]);
+  }
+  function handleDeleteWatched(id) {
+    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
+  }
+  useEffect(() => {
+    async function fetchMovies() {
+      try {
+        setIfError("");
+        setIsLoading(true);
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+        );
 
-  const [movies, setMovies] = useState(tempMovieData);
-
+        // if (!res.ok) throw new Error("You Lost Internet Conection");
+        const data = await res.json();
+        //! handle error if the name of the movie not found
+        if (data.Response === "False") throw new Error("☠☠ movie not found");
+        setMovies(data.Search);
+        // console.log(data.Search);
+      } catch (error) {
+        setIfError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    if (query.length < 2) {
+      setMovies([]);
+      setIfError("");
+      return;
+    }
+    fetchMovies();
+  }, [query]);
   return (
     <>
-      <Navbar movies={movies} />
+      <Navbar movies={movies} query={query} setQuery={setQuery} />
       <Main>
         <Box>
-          <ul className="list">
-            {movies?.map((movie, idx) => (
-              <Movie movie={movie} key={idx} />
-            ))}
-          </ul>
+          {ifError && <ErrorMessage message={ifError} />}
+          {isLoading && <IsLoading />}
+          {!isLoading && !ifError && (
+            <MovieList movies={movies} onSelected={handleSelectedId} />
+          )}
         </Box>
 
         <Box>
-          <WatchedSummary watched={watched} />
-          <ul className="list">
-            {watched.map((movie) => (
-              <WatchedMovie movie={movie} />
-            ))}
-          </ul>
+          {selectedId ? (
+            <MovieDetails
+              watched={watched}
+              selectedId={selectedId}
+              onCloseMovie={handleCloseMovie}
+              onAddWatched={handleAddToWatchd}
+            />
+          ) : (
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedMovieList
+                watched={watched}
+                onDeleteMovie={handleDeleteWatched}
+              />
+            </>
+          )}
         </Box>
       </Main>
     </>
