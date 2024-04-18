@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ErrorMessage } from "./ErrorMessage";
 import { IsLoading } from "./IsLoading";
 import StarRating from "./StarRating";
 import { KEY } from "../App";
+import { useKey } from "../CustomHooks/useKey";
 
 export function MovieDetails({
   selectedId,
@@ -14,6 +15,8 @@ export function MovieDetails({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [userRate, setUserRate] = useState(0);
+
+  const countRef = useRef(0);
 
   const {
     Title,
@@ -37,10 +40,20 @@ export function MovieDetails({
       imdbRating: Number(imdbRating),
       Runtime: parseInt(Runtime),
       userRating: userRate,
+      countRating: countRef.current,
     };
     onAddWatched(newWatchedMovie);
     onCloseMovie();
   }
+
+  useKey("Escape", onCloseMovie);
+
+  useEffect(() => {
+    if (userRate) {
+      countRef.current++;
+      console.log(countRef.current);
+    }
+  }, [userRate]);
 
   useEffect(() => {
     async function getMovieDetails() {
@@ -50,7 +63,6 @@ export function MovieDetails({
           `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`
         );
         const data = await res.json();
-        console.log(data);
         setMovie(data);
       } catch (error) {
         setError(error.message);
@@ -60,6 +72,14 @@ export function MovieDetails({
     }
     getMovieDetails();
   }, [selectedId]);
+
+  useEffect(() => {
+    if (!Title) return;
+    document.title = `Movie | ${Title}`;
+    return () => {
+      document.title = "PopCornMovies";
+    };
+  }, [Title]);
 
   if (isLoading) return <IsLoading />;
 
