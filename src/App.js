@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Navbar } from "./Components/Navbar";
 import { Main } from "./Components/Main";
-import { MoviesBox } from "./Components/MoviesBox";
-import { MovieToWatch } from "./Components/MovieToWatch";
 import { Box } from "./Components/Box";
 import { WatchedSummary } from "./Components/WatchedSummary";
 import { WatchedMovieList } from "./Components/WatchedMovieList";
