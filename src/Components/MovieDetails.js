@@ -51,7 +51,6 @@ export function MovieDetails({
   useEffect(() => {
     if (userRate) {
       countRef.current++;
-      console.log(countRef.current);
     }
   }, [userRate]);
 
