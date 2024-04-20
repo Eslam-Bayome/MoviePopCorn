@@ -12,7 +12,6 @@ import { IsLoading } from "./Components/IsLoading";
 import { MovieDetails } from "./Components/MovieDetails";
 import { useMovies } from "./CustomHooks/useMovies";
 import { useLocalStorageState } from "./CustomHooks/useLocalStorageState";
-// import "bootstrap/dist/css/bootstrap.min.css";
 
 export const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
@@ -21,6 +20,7 @@ export const KEY = "e5bda4f1";
 
 export default function App() {
   const [query, setQuery] = useState("");
+
   const [selectedId, setSelectedId] = useState(null);
 
   const { isLoading, ifError, movies } = useMovies(query, handleCloseMovie);
